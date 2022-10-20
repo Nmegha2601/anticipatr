@@ -1,6 +1,6 @@
 # ANTICIPATR
 
-This repository contains implementation of Anticipation Transformers (Anticipatr) proposed in the ECCV'22 paper.
+This repository contains implementation of Anticipation Transformer (Anticipatr) proposed in the [ECCV'22 paper](https://meghanawhal.github.io/projects/anticipatr/resources/nawhal_eccv22.pdf).
 
 
 ---
@@ -28,10 +28,10 @@ For our training setup, we use these directories.
    https://github.com/yabufarha/ms-tcn
 
 
-- We also add sample run scripts for the codes in the directory `run_scripts'
+- We also add sample run scripts for the codes in the directory `run_scripts`
 
 ---
 
 ## Contact
 
-For further questions, please email [Megha Nawhal](http://www.sfu.ca/~mnawhal/).
+For further questions, please email [Megha Nawhal](http://meghanawhal.github.io).
