@@ -2,6 +2,13 @@
 
 This repository contains implementation of Anticipation Transformer (Anticipatr) proposed in the [ECCV'22 paper](https://meghanawhal.github.io/projects/anticipatr/resources/nawhal_eccv22.pdf).
 
+---
+
+## Model
+
+<div align='center'>
+  <img src='assets/model.png' width='512px'>
+</div>
 
 ---
 
@@ -31,6 +38,20 @@ For our training setup, we use these directories.
 - We also add sample run scripts for the codes in the directory `run_scripts`
 
 ---
+
+## Citation
+
+```
+@inproceedings{deng2020continuous,
+  title={Continuous graph flow},
+  author={Nawhal, Megha and Jyothi, Akash Abdu and Mori, Greg},
+  booktitle={Proceedings of the European Conference on Computer Vision},
+  year={2022}
+}
+```
+
+---
+
 
 ## Contact
 
