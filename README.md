@@ -42,8 +42,8 @@ For our training setup, we use these directories.
 ## Citation
 
 ```
-@inproceedings{deng2020continuous,
-  title={Continuous graph flow},
+@inproceedings{nawhal2022anticipatr,
+  title={Rethinking Learning Approaches for Long-Term Action Anticipation},
   author={Nawhal, Megha and Jyothi, Akash Abdu and Mori, Greg},
   booktitle={Proceedings of the European Conference on Computer Vision},
   year={2022}
