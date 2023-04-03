@@ -378,7 +378,7 @@ def init_distributed_mode(args):
     args.dist_backend = 'nccl'
     print('| distributed init (rank {}): {}'.format(args.rank, args.dist_url), flush=True)
     torch.distributed.init_process_group(backend=args.dist_backend, init_method=args.dist_url,world_size=args.world_size, rank=args.rank)
-    if not args.mp:
+    if not torch.cuda.is_available():
         torch.distributed.barrier()
     #torch.distributed.barrier(group=torch.distributed.group.WORLD)
     setup_for_distributed(args.rank == 0)
