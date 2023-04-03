@@ -68,7 +68,7 @@ class TransformerMultipleEncoder(nn.Module):
         pos_embed = pos_embed.permute(2, 0, 1)
         tgt = torch.zeros_like(query_embed)
         encoder_mask = None
-        memory_1 = None
+        memory_snippet = None
 
         ## extracting snippet representations and handling overflow properly
         ## overflow needs to be handled as video length might not be a multiple
