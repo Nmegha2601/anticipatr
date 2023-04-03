@@ -1,6 +1,6 @@
 # ANTICIPATR
 
-This repository contains implementation of Anticipation Transformer (Anticipatr) proposed in the [ECCV'22 paper](https://meghanawhal.github.io/projects/anticipatr/resources/nawhal_eccv22.pdf).
+This repository contains the codebase for Anticipation Transformer (Anticipatr) proposed in the [ECCV'22 paper](https://meghanawhal.github.io/projects/anticipatr/resources/nawhal_eccv22.pdf).
 
 ---
 
