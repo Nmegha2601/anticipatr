@@ -14,7 +14,7 @@ This repository contains the codebase for Anticipation Transformer (Anticipatr) 
 
 ## Getting started
 
-This method proposes two-stage training method for the task of long-term action anticipation.
+Our method proposes a two-stage training method for the task of long-term action anticipation.
 
 - `pretraining` directory contains code for stage 1. This stage involves training a model for the task of snippet-based action anticipation.
 - `src` directory contains code for stage 2. This stage uses the frozen networks from stage 1 and trains two other networks for the task of long-term action anticipation.
