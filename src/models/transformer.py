@@ -48,7 +48,7 @@ class TransformerMultipleEncoder(nn.Module):
 
         ## construct decoder
         decoder_layer = TransformerMultipleEncoderDecoderLayer(d_model, nhead, dim_feedforward,
-                                            dropout, activation, normalize_before)
+                                                               dropout, activation, normalize_before)
         decoder_norm = nn.LayerNorm(d_model)
         self.decoder = TransformerMultipleEncoderDecoder(decoder_layer, num_decoder_layers, decoder_norm)
 
@@ -71,19 +71,23 @@ class TransformerMultipleEncoder(nn.Module):
         memory_1 = None
 
         ## extracting snippet representations and handling overflow properly
+        ## overflow needs to be handled as video length might not be a multiple
+        ## of  the size of snippet length used in snippet encoder
         if t % self.snippet_window == 0:
-            memory_1 = self.snippet_encoder(orig_src.reshape(bs * (t//self.snippet_window), -1, self.snippet_window), mask=torch.zeros((bs * (t//self.snippet_window),self.snippet_window),dtype=torch.bool)).reshape(bs,-1,t)
+            memory_snippet = self.snippet_encoder(orig_src.reshape(bs * (t//self.snippet_window), -1, self.snippet_window), 
+                                                  mask=torch.zeros((bs * (t//self.snippet_window),self.snippet_window),dtype=torch.bool).to(orig_src.device)).reshape(bs,-1,t)
         else:
             overflow = t % self.snippet_window
             windows_length = t - (t % self.snippet_window)
-            windows_memory = self.snippet_encoder(orig_src[:windows_length,:,:].reshape(bs * (windows_length//self.snippet_window), -1, self.snippet_window), mask=torch.zeros((bs * (windows_length//self.snippet_window), self.snippet_window),dtype=torch.bool))
-            overflow_memory = self.snippet_encoder(orig_src[-overflow:,:,:].reshape(bs, -1, overflow), mask=torch.zeros((bs,overflow),dtype=torch.bool))
-            memory_1 = torch.cat((windows_memory.reshape(bs,-1,windows_length), overflow_memory.reshape(bs, -1, overflow)), dim=2)
-        memory_2 = self.video_encoder(src, mask=encoder_mask, src_key_padding_mask=src_mask, pos=pos_embed)
-        memory_1 = memory_1.reshape(t,bs,c)
+            windows_memory = self.snippet_encoder(orig_src[:windows_length,:,:].reshape(bs * (windows_length//self.snippet_window), -1, self.snippet_window), 
+                                                  mask=torch.zeros((bs * (windows_length//self.snippet_window), self.snippet_window),dtype=torch.bool).to(orig_src.device))
+            overflow_memory = self.snippet_encoder(orig_src[-overflow:,:,:].reshape(bs, -1, overflow), mask=torch.zeros((bs,overflow),dtype=torch.bool).to(orig_src.device))
+            memory_snippet = torch.cat((windows_memory.reshape(bs,-1,windows_length), overflow_memory.reshape(bs, -1, overflow)), dim=2)
+        memory_video = self.video_encoder(src, mask=encoder_mask, src_key_padding_mask=src_mask, pos=pos_embed)
+        memory_snippet = memory_snippet.reshape(t,bs,c)
         tgt_mask = None
-        hs = self.decoder(tgt, memory_1, memory_2, tgt_mask, memory_key_padding_mask_1=src_mask, memory_key_padding_mask_2=src_mask, pos=pos_embed, query_pos=query_embed)
-        return hs.transpose(1, 2), memory_2.permute(1, 2, 0)
+        hs = self.decoder(tgt, memory_snippet, memory_video, tgt_mask, memory_key_padding_mask_1=src_mask, memory_key_padding_mask_2=src_mask, pos=pos_embed, query_pos=query_embed)
+        return hs.transpose(1, 2), memory_video.permute(1, 2, 0)
 
 
 class TransformerEncoder(nn.Module):
@@ -312,7 +316,7 @@ def build_transformer(args):
        normalize_before=args.pre_norm,
        return_intermediate_dec=True,
        pretrained_path=args.pretrained_path, 
-       combination_mode=args.combination
+       #combination_mode=args.combination
      )
 
 
