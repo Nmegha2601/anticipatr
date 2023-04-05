@@ -26,20 +26,18 @@ class AnticipationEvaluator(object):
         if isinstance(predictions,dict):
             predictions = [predictions]
         preds = {}
-        preds['mAP'] = []
         targets = {}
-        targets['mAP'] = []
 
         for p in predictions:
             for k,v in p.items():
               for k_ap,v_ap in v.items():
-                 if 'mAP' in k_ap:
+                 if 'AP' in k_ap:
                    preds[k_ap].append(v_ap[:v_ap.size(0)//2].numpy())
                    targets[k_ap].append(v_ap[v_ap.size(0)//2:].numpy())
         for k_ap,v_ap in preds.items():      
             y_true = np.asarray([t for t in targets[k_ap]])
             y_pred = np.asarray([p for p in preds[k_ap]])
-            if 'mAP' in k_ap:
+            if 'AP' in k_ap:
                 self.output['mAP_macro'].append(skmetrics.average_precision_score(np.asarray(targets[k_ap]), np.asarray(preds[k_ap]), average='macro'))
                 self.output['mAP_micro'].append(skmetrics.average_precision_score(np.asarray(targets[k_ap]), np.asarray(preds[k_ap]), average='micro'))
 
@@ -82,7 +80,7 @@ class AnticipationEvaluator(object):
             self.get_AP_perclass(predictions)
             metrics = {}
             for k,v in self.output.items():
-                if 'mAP' in k:
+                if k in ['mAP_macro', 'mAP_micro']:
                     metrics[k] = v
             return metrics
      
