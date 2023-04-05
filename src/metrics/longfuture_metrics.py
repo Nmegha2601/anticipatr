@@ -81,7 +81,7 @@ class AnticipationEvaluator(object):
             metrics = {}
             for k,v in self.output.items():
                 if k in ['mAP_macro', 'mAP_micro']:
-                    metrics[k] = v
+                    metrics[k] = np.mean(np.asarray(v))
             return metrics
      
         ## Breakfast and 50Salads evaluation
