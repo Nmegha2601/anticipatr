@@ -256,7 +256,7 @@ class SequenceDatasetLongFuture(Dataset):
             for i, t in enumerate(seen_timestamps):
                 past_records = [record for record in vrecords if record.end_frame<=t]
                 prediction_timestamps = [int(frac*(length - t)) + t for frac in unseen_timestamps]    
-                prediction_timestamps = [min(t,(length-t))  for t in prediction_timestamps] 
+                # prediction_timestamps = [min(t,length-t) for pt in prediction_timestamps] 
                 for j, pred_t in enumerate(prediction_timestamps):
                     future_records = [record for record in vrecords if record.start_frame>t and record.end_frame<=pred_t]
                     if len(past_records)<3 or len(future_records)<3:
