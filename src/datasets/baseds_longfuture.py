@@ -320,8 +320,11 @@ class RecordAnticipationData(object):
         observation_positions = []
         for idx in range(vrecord.start_frame-31,vrecord.end_frame+31):
             if idx in self.feature_data[vidname].keys():
-                features.append(self.feature_data[vidname][idx])
-                observation_positions.append(idx)
+                # set fps to choose the sampling rate (TODO: set as argument)
+                fps = 1
+                if idx% fps ==0:
+                   features.append(self.feature_data[vidname][idx])
+                   observation_positions.append(idx)
         features = torch.tensor(features,dtype=torch.float32).permute(1,0)           
         observation_positions = torch.tensor(observation_positions,dtype=torch.float32)
         video_id = ds_utils.getVideoId(self.dset, vidname)            
