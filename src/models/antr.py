@@ -185,7 +185,7 @@ class CriterionGreedyMatcher(nn.Module):
 
         target_classes = torch.zeros(b,out_logits.size(1),c-1).to(src_logits.device)
         for idx, t in enumerate(targets):
-            target_classes[idx,:t['labels_onehot'].size(0),:] = t['labels_onehot']
+            target_classes[idx,:, :t['labels_onehot'].size(0)] = t['labels_onehot']
 
         return output_classes_onehot, target_classes
 
@@ -218,7 +218,13 @@ class CriterionGreedyMatcher(nn.Module):
     def get_accuracy(self,pred,labels, outputs, targets):
         acc = dict()
         for i in range(pred.shape[0]):
-          acc['acc_{}_{}'.format(int(targets[i]['ratio_idx']*100), int(targets[i]['prediction_idx']*100))] = torch.cat((pred[i].detach().cpu(), labels[i].detach().cpu()),1)
+          k_r_p = 'acc_{}_{}'.format(int(targets[i]['ratio_idx']*100), int(targets[i]['prediction_idx']*100))
+          # check if the key already exists in output dict
+          if k_r_p in acc:
+            acc[k].append(torch.cat((pred[i].detach().cpu(), labels[i].detach().cpu()),1))
+          # if it doesn't exist create a key and value pair
+          else:
+            acc[k] = torch.cat((pred[i].detach().cpu(), labels[i].detach().cpu()),1)
             
         return acc   
 
