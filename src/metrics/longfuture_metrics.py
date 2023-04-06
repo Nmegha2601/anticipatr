@@ -69,8 +69,9 @@ class AnticipationEvaluator(object):
                 targets[k_ap] = targets[k_ap].reshape(-1, targets[k_ap].shape[-1])
                 for cls in range(targets[k_ap].shape[1]):
                     preds_logits = preds[k_ap][:,cls]
+                    max_prob_cls = np.argmax(preds_logits, axis=1) # obtaining max probability class
                     preds_i = np.zeros_like(preds_logits)
-                    preds_i[np.argmax(preds_logits, axis=1)] = 1
+                    preds_i[max_prob_cls] = 1 # get most likely predicted class
                     labels_i = targets[k_ap][:,cls]
                     self.output[k_ap].append((1-skmetrics.hamming_loss(labels_i,preds_i)) * 100)
             
