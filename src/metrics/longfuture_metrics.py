@@ -70,7 +70,7 @@ class AnticipationEvaluator(object):
                 for cls in range(targets[k_ap].shape[1]):
                     preds_logits = preds[k_ap][:,cls]
                     preds_i = np.zeros_like(preds_logits)
-                    preds_i[np.argmax(preds_logits)] = 1
+                    preds_i[np.argmax(preds_logits, axis=1)] = 1
                     labels_i = targets[k_ap][:,cls]
                     self.output[k_ap].append((1-skmetrics.hamming_loss(labels_i,preds_i)) * 100)
             
