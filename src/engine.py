@@ -89,11 +89,8 @@ def evaluate(epoch, model, criterion, data_loader, dataset, evaluate_every, devi
 
         losses = criterion(outputs, targets)
         losses_metric = {k:v for k,v in losses.items() if 'AP' in k or 'acc' in k}
-        # update the dict to include other relevant key-value pairs
-        for i in range(samples.tensors.size(0)):
-            for k, v in losses_metrics.items():
-                losses_metrics[k] = v
-        # losses_metric = [{k:v[i] for k,v in losses_metric.items()} for i in range(samples.tensors.size(0))]
+        # convert dict[key, tensor (b,x,x)] to list of length b with dict(str, tensor (x,x))
+        losses_metric = [{k:v[i] for k,v in losses_metric.items()} for i in range(samples.tensors.size(0))]
         loss_dict = {k:v for k,v in losses.items() if 'loss' in k}
         weight_dict = criterion.weight_dict
         loss_value = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
