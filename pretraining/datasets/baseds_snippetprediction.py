@@ -284,8 +284,10 @@ class RecordSnippetLongfutureAnticipationData(object):
                 if self.dset in ['ek', 'egtea']:
                     features.append(torch.tensor(self.feature_data[vidname][idx]))
                 if self.dset in ['bf','salads']:
-                # process at 15fps
-                    if idx%15==0:
+                # features processed at 15fps or select features at a specified frequency
+                # or our experiments we used 1
+                snippet_fps = 1
+                    if idx% snippet_fps ==0:
                         features.append(torch.tensor(self.feature_data[vidname][idx]))
 
         features = torch.tensor(torch.stack(features),dtype=torch.float32).permute(1,0)
